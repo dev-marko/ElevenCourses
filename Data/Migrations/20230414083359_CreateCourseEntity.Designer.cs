@@ -3,6 +3,7 @@ using System;
 using ElevenCourses.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ElevenCourses.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230414083359_CreateCourseEntity")]
+    partial class CreateCourseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,31 +118,6 @@ namespace ElevenCourses.Data.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("ElevenCourses.Models.File", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreatorId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
-
-                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -289,17 +267,6 @@ namespace ElevenCourses.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("ElevenCourses.Models.File", b =>
-                {
-                    b.HasOne("ElevenCourses.Models.ApplicationUser", "Creator")
-                        .WithMany("CreatedFiles")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -354,8 +321,6 @@ namespace ElevenCourses.Data.Migrations
             modelBuilder.Entity("ElevenCourses.Models.ApplicationUser", b =>
                 {
                     b.Navigation("CreatedCourses");
-
-                    b.Navigation("CreatedFiles");
                 });
 #pragma warning restore 612, 618
         }

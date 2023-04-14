@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using File = ElevenCourses.Models.File;
 
 namespace ElevenCourses.Data;
 
@@ -11,6 +12,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+
+    public DbSet<Course> Courses { get; set; }
+    public DbSet<File> Files { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -51,5 +55,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         {
             entity.ToTable("UserTokens");
         });
+
+        builder.Entity<ApplicationUser>()
+            .HasMany(u => u.CreatedCourses)
+            .WithOne(c => c.Creator)
+            .HasForeignKey(c => c.CreatorId);
+
+        builder.Entity<ApplicationUser>()
+            .HasMany(u => u.CreatedFiles)
+            .WithOne(f => f.Creator)
+            .HasForeignKey(f => f.CreatorId);
     }
 }
