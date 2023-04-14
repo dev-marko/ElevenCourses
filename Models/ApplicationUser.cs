@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ElevenCourses.Models.Relations;
+using Microsoft.AspNetCore.Identity;
 
 namespace ElevenCourses.Models;
 
@@ -8,4 +9,5 @@ public class ApplicationUser : IdentityUser
     public string? LastName { get; set; }
     public ICollection<Course> CreatedCourses { get; set; }
     public ICollection<File> CreatedFiles { get; set; }
+    public ICollection<CourseUser> EnrolledCourses { get; } = new List<CourseUser>();
 }

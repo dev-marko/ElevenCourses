@@ -1,4 +1,6 @@
-﻿namespace ElevenCourses.Models;
+﻿using ElevenCourses.Models.Relations;
+
+namespace ElevenCourses.Models;
 
 public class Course
 {
@@ -7,4 +9,5 @@ public class Course
     public string Description { get; set; }
     public string CreatorId { get; set; }
     public ApplicationUser Creator { get; set; }
+    public ICollection<CourseUser> EnrolledUsers { get; } = new List<CourseUser>();
 }

@@ -1,4 +1,5 @@
 ﻿using ElevenCourses.Models;
+using ElevenCourses.Models.Relations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Course> Courses { get; set; }
     public DbSet<File> Files { get; set; }
+    public DbSet<CourseUser> CourseUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -65,5 +67,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasMany(u => u.CreatedFiles)
             .WithOne(f => f.Creator)
             .HasForeignKey(f => f.CreatorId);
+
+        builder.Entity<CourseUser>()
+            .HasOne(cu => cu.Course)
+            .WithMany(u => u.EnrolledUsers)
+            .HasForeignKey(cu => cu.CourseId);
+
+        builder.Entity<CourseUser>()
+            .HasOne(cu => cu.User)
+            .WithMany(u => u.EnrolledCourses)
+            .HasForeignKey(cu => cu.UserId);
     }
 }
