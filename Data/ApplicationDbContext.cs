@@ -17,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Course> Courses { get; set; }
     public DbSet<File> Files { get; set; }
     public DbSet<CourseUser> CourseUsers { get; set; }
+    public DbSet<Week> Weeks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -77,5 +78,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(cu => cu.User)
             .WithMany(u => u.EnrolledCourses)
             .HasForeignKey(cu => cu.UserId);
+
+        builder.Entity<Course>()
+            .HasMany(c => c.Weeks)
+            .WithOne(w => w.Course)
+            .HasForeignKey(w => w.CourseId);
+
+        builder.Entity<Week>()
+            .HasMany(w => w.Files)
+            .WithOne(f => f.Week)
+            .HasForeignKey(f => f.WeekId);
     }
 }

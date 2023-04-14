@@ -10,4 +10,5 @@ public class Course
     public string CreatorId { get; set; }
     public ApplicationUser Creator { get; set; }
     public ICollection<CourseUser> EnrolledUsers { get; } = new List<CourseUser>();
+    public ICollection<Week> Weeks { get; set; }
 }
