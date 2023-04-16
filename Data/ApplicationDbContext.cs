@@ -22,7 +22,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
+
+        builder.Entity<Course>()
+               .Property(z => z.Id)
+               .ValueGeneratedOnAdd();
+
+        builder.Entity<Week>()
+               .Property(z => z.Id)
+               .ValueGeneratedOnAdd();
+
+        builder.Entity<File>()
+               .Property(z => z.Id)
+               .ValueGeneratedOnAdd();
 
         builder.Entity<ApplicationUser>(entity =>
         {
