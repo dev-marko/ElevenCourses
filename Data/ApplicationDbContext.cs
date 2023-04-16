@@ -3,7 +3,7 @@ using ElevenCourses.Models.Relations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using File = ElevenCourses.Models.File;
+
 
 namespace ElevenCourses.Data;
 
@@ -15,7 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Course> Courses { get; set; }
-    public DbSet<File> Files { get; set; }
+    public DbSet<PdfFile> Files { get; set; }
     public DbSet<CourseUser> CourseUsers { get; set; }
     public DbSet<Week> Weeks { get; set; }
 
@@ -31,7 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                .Property(z => z.Id)
                .ValueGeneratedOnAdd();
 
-        builder.Entity<File>()
+        builder.Entity<PdfFile>()
                .Property(z => z.Id)
                .ValueGeneratedOnAdd();
 

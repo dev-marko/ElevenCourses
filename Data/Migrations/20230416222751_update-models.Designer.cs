@@ -3,6 +3,7 @@ using System;
 using ElevenCourses.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ElevenCourses.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230416222751_update-models")]
+    partial class updatemodels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,7 +117,7 @@ namespace ElevenCourses.Data.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("ElevenCourses.Models.PdfFile", b =>
+            modelBuilder.Entity("ElevenCourses.Models.File", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -325,7 +328,7 @@ namespace ElevenCourses.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("ElevenCourses.Models.PdfFile", b =>
+            modelBuilder.Entity("ElevenCourses.Models.File", b =>
                 {
                     b.HasOne("ElevenCourses.Models.ApplicationUser", "Creator")
                         .WithMany("CreatedFiles")
