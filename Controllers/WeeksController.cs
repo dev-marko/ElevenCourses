@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ElevenCourses.Data;
 using ElevenCourses.Models;
+using ElevenCourses.Service.Interface;
 
 namespace ElevenCourses.Controllers
 {
     public class WeeksController : Controller
     {
+
+        readonly IBufferedFileUploadService _bufferedFileUploadService;
+
         private readonly ApplicationDbContext _context;
 
-        public WeeksController(ApplicationDbContext context)
+        public WeeksController(ApplicationDbContext context, IBufferedFileUploadService bufferedFileUploadService)
         {
             _context = context;
+            _bufferedFileUploadService = bufferedFileUploadService;
         }
 
         // GET: Weeks
@@ -24,6 +29,33 @@ namespace ElevenCourses.Controllers
         {
             var applicationDbContext = _context.Weeks.Include(w => w.Course);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        public IActionResult UploadPdf()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadPdf(IFormFile file)
+        {
+            try
+            {
+                if (await _bufferedFileUploadService.UploadFile(file))
+                {
+                    ViewBag.Message = "File Upload Successful";
+                }
+                else
+                {
+                    ViewBag.Message = "File Upload Failed";
+                }
+            }
+            catch (Exception ex)
+            {
+                //Log ex
+                ViewBag.Message = "File Upload Failed";
+            }
+            return View();
         }
 
         // GET: Weeks/Details/5
