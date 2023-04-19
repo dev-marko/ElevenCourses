@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ElevenCourses.Data;
 using ElevenCourses.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ElevenCourses.Controllers
 {
@@ -57,6 +58,7 @@ namespace ElevenCourses.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,CreatorId")] Course course)
         {
             if (ModelState.IsValid)
