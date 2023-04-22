@@ -4,14 +4,20 @@ namespace ElevenCourses.Service.Implementation
 {
     public class BufferedFileUploadLocalService : IBufferedFileUploadService
     {
-        public async Task<bool> UploadFile(IFormFile file)
+        public async Task<string> UploadFile(string folderPath, IFormFile file)
         {
             string path = "";
             try
             {
                 if (file.Length > 0)
                 {
-                    path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "UploadedFiles"));
+                    if (!Directory.Exists("weeks"))
+                    {
+                        Directory.CreateDirectory("weeks");
+                    }
+
+                    path = Path.GetFullPath(Path.Combine("weeks", folderPath));
+
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -20,11 +26,11 @@ namespace ElevenCourses.Service.Implementation
                     {
                         await file.CopyToAsync(fileStream);
                     }
-                    return true;
+                    return path;
                 }
                 else
                 {
-                    return false;
+                    return path;
                 }
             }
             catch (Exception ex)
