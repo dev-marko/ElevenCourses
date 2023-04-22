@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ElevenCourses.Data;
 using ElevenCourses.Models;
 using ElevenCourses.Service.Interface;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ElevenCourses.Controllers
 {
@@ -31,32 +32,6 @@ namespace ElevenCourses.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public IActionResult UploadPdf()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> UploadPdf(IFormFile file)
-        {
-            try
-            {
-                if (await _bufferedFileUploadService.UploadFile(file))
-                {
-                    ViewBag.Message = "File Upload Successful";
-                }
-                else
-                {
-                    ViewBag.Message = "File Upload Failed";
-                }
-            }
-            catch (Exception ex)
-            {
-                //Log ex
-                ViewBag.Message = "File Upload Failed";
-            }
-            return View();
-        }
 
         // GET: Weeks/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -89,11 +64,31 @@ namespace ElevenCourses.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,CourseId")] Week week)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,CourseId,PdfFiles")] Week week)
         {
             if (ModelState.IsValid)
             {
                 week.Id = Guid.NewGuid();
+
+                if (week.PdfFiles != null)
+                {
+                    string folder = "UploadedFiles";
+                    if (week.Name != null)
+                        folder = week.Name;
+
+                    week.Pdf = new List<PdfFile>();
+
+                    foreach (var file in week.PdfFiles)
+                    {
+                        var pdf = new PdfFile()
+                        {
+                            Name = file.FileName,
+                            Url = await _bufferedFileUploadService.UploadFile(folder, file),
+                            Path = folder + "\\" + file.FileName
+                        };
+                        week.Pdf.Add(pdf);
+                    }
+                }
                 _context.Add(week);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -124,7 +119,7 @@ namespace ElevenCourses.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,CourseId")] Week week)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,CourseId,PdfFiles")] Week week)
         {
             if (id != week.Id)
             {
@@ -135,6 +130,25 @@ namespace ElevenCourses.Controllers
             {
                 try
                 {
+                    if (week.PdfFiles != null)
+                    {
+                        string folder = "UploadedFiles";
+                        if (week.Name != null)
+                            folder = week.Name;
+
+                        week.Pdf = new List<PdfFile>();
+
+                        foreach (var file in week.PdfFiles)
+                        {
+                            var pdf = new PdfFile()
+                            {
+                                Name = file.FileName,
+                                Url = await _bufferedFileUploadService.UploadFile(folder, file),
+                                Path = folder + "\\" + file.FileName
+                            };
+                            week.Pdf.Add(pdf);
+                        }
+                    }
                     _context.Update(week);
                     await _context.SaveChangesAsync();
                 }
