@@ -72,9 +72,7 @@ namespace ElevenCourses.Controllers
 
                 if (week.PdfFiles != null)
                 {
-                    string folder = "UploadedFiles";
-                    if (week.Name != null)
-                        folder = week.Name;
+                    var folder = $"{week.CourseId.ToString()}\\{week.Id}";
 
                     week.Pdf = new List<PdfFile>();
 
@@ -132,9 +130,7 @@ namespace ElevenCourses.Controllers
                 {
                     if (week.PdfFiles != null)
                     {
-                        string folder = "UploadedFiles";
-                        if (week.Name != null)
-                            folder = week.Name;
+                        var folder = $"{week.CourseId.ToString()}\\{week.Id}";
 
                         week.Pdf = new List<PdfFile>();
 
