@@ -3,6 +3,7 @@ using System;
 using ElevenCourses.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ElevenCourses.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230416223835_UpdateModels")]
+    partial class UpdateModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,16 +123,13 @@ namespace ElevenCourses.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FilePath")
                         .HasColumnType("text");
 
-                    b.Property<string>("Path")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
+                    b.Property<string>("FileUrl")
                         .HasColumnType("text");
 
                     b.Property<Guid>("WeekId")
@@ -137,7 +137,7 @@ namespace ElevenCourses.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("WeekId");
 
@@ -330,15 +330,17 @@ namespace ElevenCourses.Data.Migrations
 
             modelBuilder.Entity("ElevenCourses.Models.PdfFile", b =>
                 {
-                    b.HasOne("ElevenCourses.Models.ApplicationUser", null)
+                    b.HasOne("ElevenCourses.Models.ApplicationUser", "Creator")
                         .WithMany("CreatedFiles")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("CreatorId");
 
                     b.HasOne("ElevenCourses.Models.Week", "Week")
-                        .WithMany("Pdf")
+                        .WithMany("Files")
                         .HasForeignKey("WeekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Creator");
 
                     b.Navigation("Week");
                 });
@@ -440,7 +442,7 @@ namespace ElevenCourses.Data.Migrations
 
             modelBuilder.Entity("ElevenCourses.Models.Week", b =>
                 {
-                    b.Navigation("Pdf");
+                    b.Navigation("Files");
                 });
 #pragma warning restore 612, 618
         }
