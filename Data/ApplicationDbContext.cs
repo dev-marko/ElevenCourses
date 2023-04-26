@@ -3,7 +3,9 @@ using ElevenCourses.Models.Relations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using File = ElevenCourses.Models.File;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Reflection.Emit;
+
 
 namespace ElevenCourses.Data;
 
@@ -15,14 +17,25 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Course> Courses { get; set; }
-    public DbSet<File> Files { get; set; }
+    public DbSet<PdfFile> Files { get; set; }
     public DbSet<CourseUser> CourseUsers { get; set; }
     public DbSet<Week> Weeks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
+
+        builder.Entity<Course>()
+               .Property(z => z.Id)
+               .ValueGeneratedOnAdd();
+
+        builder.Entity<Week>()
+               .Property(z => z.Id)
+               .ValueGeneratedOnAdd();
+
+        builder.Entity<PdfFile>()
+               .Property(z => z.Id)
+               .ValueGeneratedOnAdd();
 
         builder.Entity<ApplicationUser>(entity =>
         {
@@ -64,11 +77,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithOne(c => c.Creator)
             .HasForeignKey(c => c.CreatorId);
 
-        builder.Entity<ApplicationUser>()
-            .HasMany(u => u.CreatedFiles)
-            .WithOne(f => f.Creator)
-            .HasForeignKey(f => f.CreatorId);
-
         builder.Entity<CourseUser>()
             .HasOne(cu => cu.Course)
             .WithMany(u => u.EnrolledUsers)
@@ -85,8 +93,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(w => w.CourseId);
 
         builder.Entity<Week>()
-            .HasMany(w => w.Files)
-            .WithOne(f => f.Week)
-            .HasForeignKey(f => f.WeekId);
+             .HasMany(w => w.Pdf)
+             .WithOne(f => f.Week)
+             .HasForeignKey(f => f.WeekId);
+
     }
 }

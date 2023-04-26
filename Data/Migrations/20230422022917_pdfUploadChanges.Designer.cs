@@ -3,6 +3,7 @@ using System;
 using ElevenCourses.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ElevenCourses.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230422022917_pdfUploadChanges")]
+    partial class pdfUploadChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,13 +129,10 @@ namespace ElevenCourses.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("Path")
-                        .HasColumnType("text");
-
                     b.Property<string>("Url")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("WeekId")
+                    b.Property<Guid?>("WeekId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -334,13 +334,9 @@ namespace ElevenCourses.Data.Migrations
                         .WithMany("CreatedFiles")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("ElevenCourses.Models.Week", "Week")
+                    b.HasOne("ElevenCourses.Models.Week", null)
                         .WithMany("Pdf")
-                        .HasForeignKey("WeekId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Week");
+                        .HasForeignKey("WeekId");
                 });
 
             modelBuilder.Entity("ElevenCourses.Models.Relations.CourseUser", b =>
