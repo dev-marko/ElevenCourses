@@ -21,10 +21,21 @@ namespace ElevenCourses.Controllers
         }
 
         // GET: Courses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchCourse)
         {
-            var applicationDbContext = _context.Courses.Include(c => c.Creator);
-            return View(await applicationDbContext.ToListAsync());
+            
+            if (!String.IsNullOrEmpty(searchCourse))
+            {
+                var courses = from c in _context.Courses select c;
+                courses = courses.Where(s => s.Name != null && s.Name.ToLower().Contains(searchCourse.ToLower()));
+                var applicationDbContext = courses.Include(c => c.Creator);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else {
+                var applicationDbContext = _context.Courses.Include(c => c.Creator);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            
         }
 
         // GET: Courses/Details/5
