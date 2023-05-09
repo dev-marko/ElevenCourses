@@ -47,9 +47,27 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - ElevenCourses - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="footer-left text-dark">
+            <a> &copy; @DateTime.Now.Year, Eleven Courses Inc. </a>
         </div>
+        <div class="footer-center text-dark">
+            <p>Eleven Courses</p>
+        </div>
+        <div class="footer-right">            
+                <ul class="nav ">
+                    <li>
+                        <a class="nav-link text-black" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-black" asp-area="" asp-controller="Courses" asp-action="Courses">Courses</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-black"  asp-area="" asp-controller="Home" asp-action="Index">About us</a>
+                    </li>
+                </ul>
+        </div>
+                
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

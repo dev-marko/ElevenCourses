@@ -20,3 +20,40 @@ html {
 body {
   margin-bottom: 60px;
 }
+footer {
+    background-color: white;
+    padding: 0px;
+    font-size: 16px;
+    color: black;
+    line-height:60px;
+    text-align:center;
+    margin-bottom: 0px;
+    margin-top: auto;
+
+}
+.footer-left {
+    float: left;
+    font-style: normal;
+    font-family: 'Times New Roman', serif;
+    margin:0;
+    padding: 0 15px;
+}
+.footer-center {
+    display: inline-block;
+    font-size: 20px;
+    font-style: italic;
+    font-family: 'Times New Roman', serif;
+    font-style: oblique;
+    margin:0px;
+    
+}
+
+.footer-right {
+    float: right;
+    font-style: normal;
+    color: black;
+    display: block;
+    margin:0px;
+    font-family: 'Times New Roman', serif;
+    padding: 0 15px;
+}
