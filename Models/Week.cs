@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ElevenCourses.Models;
+
+public class Week
+{
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public Guid CourseId { get; set; }
+    public Course? Course { get; set; }
+    [NotMapped]
+    public IFormFileCollection? PdfFiles { get; set; }
+    public List<PdfFile>? Pdf { get; set; }
+
+   // public ICollection<PdfFile>? Files { get; set; }
+} 
