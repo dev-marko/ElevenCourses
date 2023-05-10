@@ -37,6 +37,8 @@ namespace ElevenCourses.Controllers
 
             var course = await _context.Courses
                 .Include(c => c.Creator)
+                .Include(c => c.Weeks)
+                .ThenInclude(w => w.Pdf)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
