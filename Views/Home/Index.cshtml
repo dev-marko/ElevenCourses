@@ -2,7 +2,21 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core.</a>.</p>
+<div class="row justify-content-center">
+    <div class="card align-items-center text-bg-light my-5">
+        <div class="row g-0">
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <img alt="man typing on laptop" class="img-fluid rounded h-75" src="https://img.theweek.in/content/dam/week/news/sci-tech/2019/May/laptop-project-work-project-management-software-shut.jpg">
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <h5 class="card-title fs-2 mt-4">
+                        <strong>Welcome to Eleven Courses!</strong>
+                    </h5>
+                    <p class="card-text mt-4 "> If you are a knowledge lover, you are at the perfect place. This is a learning platform where you can find informations, materials, books and videos from different areas. Keep going on the next pages to view all courses!</p>
+                    <a class="btn btn-primary mt-2" asp-area="" asp-controller="Courses" asp-action="Index">View Courses</a> <!-- da se promeni HREF koga ke se implementira ViewCourses view -->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
