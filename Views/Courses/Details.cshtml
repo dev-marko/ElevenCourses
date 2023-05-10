@@ -5,55 +5,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container pb-3" style="height: auto; background: #f8f9fb">
+<div class="container pb-3 rounded" style="height: auto; background: #f8f9fb">
     <h3 class="pt-5 m-2">@Html.DisplayFor(model => model.Name)</h3>
     <p class="pb-3 m-3">@Html.DisplayFor(model => model.Description)</p>
 </div>
 
-@if (Model.Weeks != null && Model.Weeks.Count > 0)
+@if (Model.Weeks is {Count: > 0 })
 {
-    <ul>
-        @foreach (var week in Model.Weeks)
-        {
-            <li>@week.Name</li>
-        }
-    </ul>
+    @foreach (var week in Model.Weeks)
+    {
+        <div class="container pb-3 rounded" style="height: auto; background: #f8f9fb">
+            <h3 class="pt-5 m-2">@week.Name</h3>
+            <p class="pb-3 m-3">@week.Description</p>
+            @if (week.Pdf != null)
+            {
+                <ul style="list-style-type:none;">
+                    @foreach (var doc in week.Pdf)
+                    {
+                        <li>
+                            <i class="bi bi-file-earmark-pdf-fill"></i>
+                            <a href="@doc.Path" download>@doc.Name</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
 }
-
-
-
-
-<div>
-    <h4>Course</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Creator)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Creator.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Weeks)
-        </dt>
-        <dd class="col-sm-10">
-          
-
-        </dd>
-    </dl>
-</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
