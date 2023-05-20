@@ -1,0 +1,21 @@
+﻿@model E_Tests.Models.Test
+<div class="container ">
+    <div class=" row justify-content-center">
+        <div class="col-7">
+            <div class="card text-center">
+                <div class="card-header">
+                    Start test
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"> @Model.name</h5>
+                    <p class="card-text">Time : @Model.time min</p>
+                    <p class="card-text"> Questions : @Model.Questions.Count</p>
+                    <a asp-action="Start" asp-route-id="@Model.id" class="btn  btn-primary ">Start test</a>
+                </div>
+                <div class="card-footer text-muted">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

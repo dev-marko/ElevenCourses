@@ -1,0 +1,48 @@
+﻿@model E_Tests.Models.Results
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Results</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.user)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.user.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.points)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.points)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.testName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.testName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.procent)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.procent)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.test)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.test.id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

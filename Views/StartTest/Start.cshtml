@@ -1,0 +1,157 @@
+﻿@model E_Tests.Models.TestsDTO
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class=" row justify-content-center">
+    <div class="col-2">
+        <section>
+            <div >
+                <h1 id="tim">00:00</h1>
+            </div>
+        </section>
+    </div>
+    <div class=" col-6 ">
+        <div>
+            
+            <div class="row">
+
+                <div class="card-header" style="width:640px;text-align: center;">
+                    @Html.DisplayFor(modelItem => Model.test.name)
+
+                </div>
+
+            </div>
+            <br />
+
+
+            @for (int i = 0; i < Model.questions.Count; i++)
+            {
+
+
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Question:</h6>
+                            <h3 style="width: 600px"> @Html.DisplayFor(modelItem => Model.questions[i].question)</h3>
+
+                            <input type="text" id="@i" value="@Model.questions[i].id" hidden>
+                        </div>
+
+                        <div class="card-body">
+                            <h6>Answers offered:</h6>
+                            <div class="form-grup">
+                                <div><input type="radio" name="@i" value="@Model.questions[i].Answer1" class="@i"> @Html.DisplayFor(modelItem => Model.questions[i].Answer1)</div>
+                                <br>
+                                <div><input type="radio" name="@i" value="@Model.questions[i].Answer2"class="@i"> @Html.DisplayFor(modelItem => Model.questions[i].Answer2)</div>
+                                <br>
+                                <div><input type="radio" name="@i" value="@Model.questions[i].Answer3" class="@i"> @Html.DisplayFor(modelItem => Model.questions[i].Answer3)</div>
+                                <br>
+                                <div><input type="radio" name="@i" value="@Model.questions[i].Answer4" class="@i"> @Html.DisplayFor(modelItem => Model.questions[i].Answer4)</div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            }
+            <form id="frm1" asp-controller="StartTest" asp-action="Finis"  hidden>
+                <input  type="text" name="test" value="@Model.test.id" hidden/>
+            </form>
+            <button class="btn btn-primary" onclick="myFunction()">Submit</button>
+            <br />
+            <br />
+        </div>
+    </div>
+</div>
+       
+
+<script id="rendered-js">
+    let timeSecond = @Model.test.time;
+    timeSecond = timeSecond*60
+    const timeH = document.getElementById("tim");
+
+    displayTime(timeSecond);
+
+    const countDown = setInterval(() => {
+        timeSecond--;
+        displayTime(timeSecond);
+        if (timeSecond == 0 || timeSecond < 1) {
+            endCount();
+            clearInterval(countDown);
+            myFunction();
+        }
+    }, 1000);
+
+    function displayTime(second) {
+        const min = Math.floor(second / 60);
+        const sec = Math.floor(second % 60);
+        timeH.innerHTML = `
+  ${min < 10 ? "0" : ""}${min}:${sec < 10 ? "0" : ""}${sec}
+  `;
+    }
+
+    function endCount() {
+        timeH.innerHTML = "Time out";
+    }
+
+
+
+
+
+
+
+
+
+     var odgovori="";
+        var prasanje="";
+        var caunt1=@Model.questions.Count;
+        var caunt2=@Model.questions.Count;
+        function myFunction() {
+            var form= document.getElementById("frm1");
+            var input1 = document.createElement("input");
+            var input2 = document.createElement("input");
+            input1.type = "text";
+            input2.type = "text";
+            input1.name="odgovori"
+            input2.name="prasanje"
+
+
+
+            for (var i=0;i<caunt1;i++)
+            {
+                var pom=i.toString();
+                 prasanje+= document.getElementById(pom).value
+                prasanje+=",";
+            }
+
+            for (var i=0;i<caunt2;i++)
+            {
+                var pom = i.toString();
+                var str = document.getElementsByClassName(pom);
+                var flag = 0
+                for (var j = 0; j < str.length; j++) {
+                    if (str[j].checked == true) {
+                        odgovori += str[j].value
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    odgovori += "null"
+                }
+
+
+                odgovori += ",";
+            }
+            input1.value=odgovori;
+            input2.value=prasanje;
+            form.appendChild(input1);
+            form.appendChild(input2);
+            form.submit();
+        }
+</script>
+
