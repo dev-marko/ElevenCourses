@@ -1,0 +1,29 @@
+﻿@model E_Tests.Models.Results
+
+<div class="container ">
+    <div class=" row justify-content-center">
+        <div class="col-7">
+            <div class="card text-center">
+                <div class="card-header">
+                    @Model.testName
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"> Percents: @Model.procent %</h5>
+                    <h6> Correct answer:  @Model.points</h6>
+                    <br />
+                    @if (Model.procent >= 50)
+                    {
+                    <a asp-action="GetCertificat" asp-controller="Results" asp-route-id="@Model.id" class="btn  btn-primary ">Get certificate</a>
+                    }else
+                    {
+                    <h5 style="color:red;">The test is not passed, try again!</h5>
+                    }
+
+                </div>
+                <div class="card-footer text-muted"> 
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
