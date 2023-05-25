@@ -21,6 +21,10 @@
     </nav>
 </div>
 
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+</div>
+
 <div class="container pb-3 rounded" style="height: auto; background: #f8f9fb">
     <h3 class="pt-5 m-2">@Html.DisplayFor(model => model.Name)</h3>
     <p class="pb-3 m-3">@Html.DisplayFor(model => model.Description)</p>
@@ -48,7 +52,3 @@
         </div>
     }
 }
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
