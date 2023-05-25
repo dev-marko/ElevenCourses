@@ -52,7 +52,8 @@
                     }
                 </h6>
                 <p class="card-text mt-3">@item.Description</p>
-                <a class="btn btn-primary me-3" asp-action="Details" asp-route-id="@item.Id">View</a>
+                <a class="btn btn-primary me-1" asp-action="Details" asp-route-id="@item.Id">View</a>
+                <a class="btn btn-success me-3" asp-action="Enroll" asp-controller="CourseUsers" asp-route-courseId="@item.Id">Enroll</a>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </div>

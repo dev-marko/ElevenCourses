@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +21,11 @@ namespace ElevenCourses.Controllers
         // GET: CourseUsers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CourseUsers.Include(c => c.Course).Include(c => c.User);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var applicationDbContext = _context.CourseUsers
+                .Include(c => c.Course)
+                .Include(c => c.User)
+                .Where(c => c.UserId == userId);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -70,9 +71,31 @@ namespace ElevenCourses.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", courseUser.CourseId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", courseUser.UserId);
             return View(courseUser);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Enroll(Guid courseId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var courseUser = new CourseUser
+            {
+                Id = Guid.NewGuid(),
+                CourseId = courseId,
+                UserId = userId
+            };
+
+            var enrollmentExists = _context.CourseUsers.Any(cu => cu.CourseId == courseId && cu.UserId == userId);
+
+            if (enrollmentExists) return RedirectToAction("Index", "Courses");
+
+            _context.Add(courseUser);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Courses");
         }
 
         // GET: CourseUsers/Edit/5
@@ -88,6 +111,7 @@ namespace ElevenCourses.Controllers
             {
                 return NotFound();
             }
+
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", courseUser.CourseId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", courseUser.UserId);
             return View(courseUser);
@@ -123,8 +147,10 @@ namespace ElevenCourses.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", courseUser.CourseId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", courseUser.UserId);
             return View(courseUser);
@@ -159,19 +185,20 @@ namespace ElevenCourses.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.CourseUsers'  is null.");
             }
+
             var courseUser = await _context.CourseUsers.FindAsync(id);
             if (courseUser != null)
             {
                 _context.CourseUsers.Remove(courseUser);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CourseUserExists(Guid id)
         {
-          return (_context.CourseUsers?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.CourseUsers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
