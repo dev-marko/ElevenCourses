@@ -4,11 +4,10 @@ namespace ElevenCourses.Models;
 
 public class Course
 {
+    [DisplayName("Course")]
     public Guid Id { get; set; }
-
     [DisplayName("Course Name")]
     public string? Name { get; set; }
-    [DisplayName("Course")]
     public string? Description { get; set; }
     public string? CreatorId { get; set; }
     public ApplicationUser? Creator { get; set; }
