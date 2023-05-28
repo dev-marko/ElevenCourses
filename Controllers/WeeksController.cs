@@ -55,7 +55,7 @@ namespace ElevenCourses.Controllers
         // GET: Weeks/Create
         public IActionResult Create()
         {
-            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id");
+           // ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id");
             return View();
         }
 
@@ -64,11 +64,12 @@ namespace ElevenCourses.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,CourseId,PdfFiles")] Week week)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,PdfFiles")] Week week, Guid id)
         {
             if (ModelState.IsValid)
             {
                 week.Id = Guid.NewGuid();
+                week.CourseId = id;
 
                 if (week.PdfFiles != null)
                 {
@@ -89,9 +90,9 @@ namespace ElevenCourses.Controllers
                 }
                 _context.Add(week);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Courses", new {ID = id});
             }
-            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", week.CourseId);
+          // ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", week.CourseId);
             return View(week);
         }
 
@@ -117,7 +118,7 @@ namespace ElevenCourses.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,CourseId,PdfFiles")] Week week)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,CourseId,Description,PdfFiles")] Week week)
         {
             if (id != week.Id)
             {
@@ -159,7 +160,7 @@ namespace ElevenCourses.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ManageWeeks", "Courses", new { ID = week.CourseId });
             }
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", week.CourseId);
             return View(week);
@@ -200,7 +201,7 @@ namespace ElevenCourses.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ManageWeeks", "Courses", new { ID = week.CourseId });
         }
 
         private bool WeekExists(Guid id)
