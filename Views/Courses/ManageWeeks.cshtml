@@ -1,0 +1,40 @@
+﻿@model ElevenCourses.Models.Course
+
+@{
+    ViewData["Title"] = "ManageWeeks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Manage Weeks of @Model.Name</h3>
+
+<a class="btn btn-success me-3" asp-action="Create" asp-controller="Weeks">Create new week</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(week => week.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(week => week.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Weeks) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                    <a class="btn btn-info me-3" asp-action="Edit" asp-controller="Weeks" asp-route-id="@item.Id">Edit</a> |
+                    <a class="btn btn-danger me-3" asp-action="Delete" asp-controller="Weeks" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
