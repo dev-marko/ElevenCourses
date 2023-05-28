@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<ElevenCourses.Models.Course>
+@using System.Security.Claims
+@{
+    // Get the ID of the logged-in user
+    string userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
 
 @{
     ViewData["Title"] = "Index";
@@ -20,7 +25,7 @@
     </div>
     <div>
         <p>
-            <a class="btn btn-outline-secondary" asp-action="Create">Create New</a>
+            <a class="btn btn-outline-secondary" asp-action="Create" asp-route-id="@userId">Create New</a>
         </p>
     </div>
 </div>
