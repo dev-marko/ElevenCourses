@@ -83,6 +83,28 @@ namespace ElevenCourses.Controllers
             return View(course);
         }
 
+        public async Task<IActionResult> ManageWeeks(Guid? id)
+        {
+            if (id == null || _context.Courses == null)
+            {
+                return NotFound();
+            }
+
+            //  var course = await _context.Courses.FindAsync(id);
+            var course = await _context.Courses
+             .Include(c => c.Creator)
+             .Include(c => c.Weeks)
+             .ThenInclude(w => w.Pdf)
+             .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+  
+            return View(course);
+        }
+
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -99,6 +121,7 @@ namespace ElevenCourses.Controllers
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", course.CreatorId);
             return View(course);
         }
+
 
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
