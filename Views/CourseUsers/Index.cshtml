@@ -5,7 +5,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between mt-3">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door"></i>Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">My Courses</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<h1>Enrolled Courses</h1>
 
 
 <table class="table">

@@ -166,6 +166,7 @@ namespace ElevenCourses.Controllers
 
             var courseUser = await _context.CourseUsers
                 .Include(c => c.Course)
+                .ThenInclude(c => c.Creator)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (courseUser == null)
