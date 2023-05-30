@@ -10,4 +10,5 @@ public class ApplicationUser : IdentityUser
     public ICollection<Course>? CreatedCourses { get; set; }
     public ICollection<PdfFile>? CreatedFiles { get; set; }
     public ICollection<CourseUser> EnrolledCourses { get; } = new List<CourseUser>();
+    public ICollection<Test> Tests { get; set; } = new List<Test>();
 }
