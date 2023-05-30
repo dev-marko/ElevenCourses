@@ -22,7 +22,8 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    <a class="btn btn-outline-info me-3" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    <a class="btn btn-outline-secondary" asp-action="ManageWeeks" asp-route-id="@Model?.Id">Manage weeks</a>
 </div>
 
 <div class="container pb-3 rounded" style="height: auto; background: #f8f9fb">

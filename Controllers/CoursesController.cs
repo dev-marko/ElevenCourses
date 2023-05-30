@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ElevenCourses.Data;
 using ElevenCourses.Models;
 using Microsoft.AspNetCore.Authorization;
+using ElevenCourses.Service.Interface;
 
 namespace ElevenCourses.Controllers
 {
@@ -58,6 +59,7 @@ namespace ElevenCourses.Controllers
         }
 
         // GET: Courses/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id");
@@ -70,20 +72,45 @@ namespace ElevenCourses.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,CreatorId")] Course course)
+        public async Task<IActionResult> Create(String id,[Bind("Id,Name,Description,CreatorId")] Course course)
         {
             if (ModelState.IsValid)
             {
                 course.Id = Guid.NewGuid();
+                course.CreatorId = id;
                 _context.Add(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", course.CreatorId);
+           // ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", course.CreatorId);
+            return View(course);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ManageWeeks(Guid? id)
+        {
+            if (id == null || _context.Courses == null)
+            {
+                return NotFound();
+            }
+
+            //  var course = await _context.Courses.FindAsync(id);
+            var course = await _context.Courses
+             .Include(c => c.Creator)
+             .Include(c => c.Weeks)
+             .ThenInclude(w => w.Pdf)
+             .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+  
             return View(course);
         }
 
         // GET: Courses/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null || _context.Courses == null)
@@ -100,11 +127,13 @@ namespace ElevenCourses.Controllers
             return View(course);
         }
 
+
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,CreatorId")] Course course)
         {
             if (id != course.Id)
@@ -137,6 +166,7 @@ namespace ElevenCourses.Controllers
         }
 
         // GET: Courses/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.Courses == null)
@@ -158,6 +188,7 @@ namespace ElevenCourses.Controllers
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             if (_context.Courses == null)
