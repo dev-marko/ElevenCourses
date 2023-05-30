@@ -20,6 +20,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<PdfFile> Files { get; set; }
     public DbSet<CourseUser> CourseUsers { get; set; }
     public DbSet<Week> Weeks { get; set; }
+    public  DbSet<Question> Questions { get; set; }
+    public  DbSet<Test> Tests { get; set; }
+    public  DbSet<QuestionInTest> QuestionInTests { get; set; }
+    public  DbSet<Results> Results { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -36,6 +40,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<PdfFile>()
                .Property(z => z.Id)
                .ValueGeneratedOnAdd();
+        
+        builder.Entity<Question>()
+            .Property(z => z.id)
+            .ValueGeneratedOnAdd();
+
+        builder.Entity<Results>()
+            .Property(z => z.id)
+            .ValueGeneratedOnAdd();
 
         builder.Entity<ApplicationUser>(entity =>
         {
@@ -96,6 +108,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
              .HasMany(w => w.Pdf)
              .WithOne(f => f.Week)
              .HasForeignKey(f => f.WeekId);
+        
+        builder.Entity<QuestionInTest>()
+            .HasKey(z => new { z.questionId, z.testId });
+        
+        builder.Entity<QuestionInTest>()
+            .HasOne(z => z.question)
+            .WithMany(z => z.Tests)
+            .HasForeignKey(z => z.questionId);
 
+        builder.Entity<QuestionInTest>()
+            .HasOne(z => z.test)
+            .WithMany(z => z.Questions)
+            .HasForeignKey(z => z.testId);
+
+        builder.Entity<Test>()
+            .HasOne<ApplicationUser>(z => z.user)
+            .WithMany(z => z.Tests);
     }
 }

@@ -1,0 +1,117 @@
+﻿@model List<TestsDTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{ int i = 0;}
+<div class="row">
+    <div class="col-3">
+        
+            @foreach (var item in Model)
+            {
+                    <div class="col">
+                        <div class="mx-auto ">
+
+
+                            <div class="border" style="width: 300px ;   background-color:#F0F0F0">
+                                <div class="card-body">
+                                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.test.name)</h5>
+                                    <hr />
+                                    <h6>Show the test results</h6>
+                                    <hr>
+                                    <a asp-controller="Results" asp-action="Index" asp-route-id="@item.test.id" class="btn btn-primary">Show results</a>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                <br />
+            }
+        
+            
+      </div>
+
+        <div class="col-9">
+
+            @foreach (var item in Model)
+            {
+                <div id="accordion">
+                    <div class="col-9">
+                        <div class="card">
+
+                            <div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        @Html.DisplayFor(modelItem => item.test.name)
+
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title">Link to share the test</h5>
+                                        <input type="text" style="width: 700px" value="https://localhost:44350/StartTest/Index/@item.test.id">
+                                        <br>
+                                        <br>
+                                        <h5>Time : @Html.DisplayFor(modelItem => item.test.time) min</h5>
+
+                                        <hr>
+
+                                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#elementToToggle">
+                                            Show the questions
+                                        </button>
+                                        <a class="btn btn-secondary" asp-action="Edit" asp-controller="Tests" asp-route-id="@item.test.id">Edit</a>
+                                        <a class="btn btn-danger" asp-action="Delete" asp-controller="Tests" asp-route-id="@item.test.id">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="mb-0">
+                            </h5>
+
+
+                        <div id="elementToToggle" class="collapse">
+                                <div class="card-body">
+                                    @foreach (var it in item.questions)
+                                    {
+
+
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
+
+                                        <hr>
+                                        <h3>Question:</h3>
+                                        <h6 style="width: 600px"> @Html.DisplayFor(modelItem => it.question)</h6>
+                                        <br>
+
+                                        <h4>Correct answer:</h4>
+                                        <h6> @Html.DisplayFor(modelItem => it.correctAnswer)</h6>
+                                        <br>
+                                        <h5>Answers offered:</h5>
+                                        <ul>
+                                            <li>@Html.DisplayFor(modelItem => it.Answer1)</li>
+                                            <li>@Html.DisplayFor(modelItem => it.Answer2)</li>
+                                            <li>@Html.DisplayFor(modelItem => it.Answer3)</li>
+                                            <li>@Html.DisplayFor(modelItem => it.Answer4)</li>
+                                        </ul>
+                                        <hr>
+                                        <a  class="btn btn-secondary" asp-action="Edit" asp-controller="Questions" asp-route-id="@it.id">Edit</a>
+                                        <a  class="btn btn-danger" asp-action="Delete" asp-controller="Questions" asp-route-id="@it.id" >Delete</a>
+                                        <hr>
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                 {  i++; }
+            }
+
+        </div>
+    </div>

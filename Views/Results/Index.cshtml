@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Results>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container ">
+    <div class=" row justify-content-center">
+        <div class="col-8">
+
+
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                      
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Test name
+                        </th>
+                        <th>
+                            Percents
+                        </th>
+                        <th>
+                            Correct answers
+                        </th>
+                        
+                    </tr>
+                </thead>
+                @{int i = 0; } 
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr style="text-align: center;">
+                        <td>@i</td>
+                     
+                        <td>
+                            @Html.DisplayFor(modelItem => item.user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.testName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.procent) %
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.points)
+                        </td>
+
+                    </tr>
+                    i++;
+                }
+              
+            </tbody>
+                <tfoot class="thead-dark">
+                    <tr>
+                        <th scope="col" ></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        
+                    </tr>
+                </tfoot>
+            </table>
+            @{ var t=Model.ToList();}
+            <a  asp-controller="Results" asp-action="Export" asp-route-id="@t[0].testid" class="btn  btn-primary ">Export data</a>
+            </div>
+        </div>
+    </div>
